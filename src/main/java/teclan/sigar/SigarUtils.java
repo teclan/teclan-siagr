@@ -212,7 +212,7 @@ public class SigarUtils {
 			long deltaTime = afterTime - startTime;
 
 			diskLoad.setFileSystem(fileSystem);
-			diskLoad.setDiskQueue((after.getDiskQueue() - before.getDiskQueue()) * 8 / deltaTime * 1000);
+			diskLoad.setDiskQueue(after.getDiskQueue());
 			diskLoad.setDiskReads((after.getDiskReads() - before.getDiskReads()) / deltaTime);
 			diskLoad.setDiskWrites((after.getDiskWrites() - before.getDiskWrites()) / deltaTime);
 			diskLoad.setWriteInBytes((after.getDiskWriteBytes() - before.getDiskWriteBytes()) / deltaTime);
