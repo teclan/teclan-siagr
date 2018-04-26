@@ -1,5 +1,6 @@
 package teclan.sigar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hyperic.sigar.Cpu;
@@ -330,6 +331,21 @@ public class SigarUtils {
 		return null;
 	}
 
+	public static List<ProcessInfo> getProcessInfo(List<String> process) {
+		
+		List<ProcessInfo> processInfos = new ArrayList<ProcessInfo>();
+
+		for (long pid : getProcList()) {
+
+			ProcessInfo processInfo = getProcessInfo(pid, process);
+
+			if (processInfo != null) {
+				processInfos.add(processInfo);
+			}
+		}
+		return processInfos;
+	}
+
 	/**
 	 * 获取指定进程信息
 	 * 
@@ -346,6 +362,44 @@ public class SigarUtils {
 		} catch (SigarException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
+
+		ProcessInfo info = new ProcessInfo();
+		info.setPid(list.get(0));
+		info.setUser(list.get(1));
+		info.setStartTime(list.get(2));
+		info.setMemSize(list.get(3));
+		info.setMemUse(list.get(4));
+		info.setMemhare(list.get(5));
+		info.setState(list.get(6));
+		info.setCpuTime(list.get(7));
+		info.setName(list.get(8));
+
+		return info;
+	}
+
+	/**
+	 * 判断对应进程号是否是需要的进程，如果是，则返回该进程的信,否则返回空
+	 * 
+	 * @param pid
+	 * @param process
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static ProcessInfo getProcessInfo(long pid, List<String> process) {
+
+		List<String> list = null;
+		try {
+			list = Ps.getInfo(getInstance(), pid);
+		} catch (SigarException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+
+		for (String name : process) {
+			if (!list.get(8).contains(name)) {
+				return null;
+			}
+		}
+
 
 		ProcessInfo info = new ProcessInfo();
 		info.setPid(list.get(0));
