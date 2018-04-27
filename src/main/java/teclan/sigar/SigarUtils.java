@@ -394,6 +394,10 @@ public class SigarUtils {
 			LOGGER.error(e.getMessage(), e);
 		}
 
+		if (list == null) {
+			return null;
+		}
+
 		for (String name : process) {
 			if (!list.get(8).contains(name)) {
 				return null;
